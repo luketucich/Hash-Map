@@ -68,10 +68,27 @@ export default class LinkedList {
     return currNode;
   }
 
+  valueAt(index) {
+    if (index + 1 > this.listSize) {
+      return "Index out of bounds";
+    }
+
+    let count = 0,
+      currNode = this.headNode;
+
+    while (count !== index) {
+      currNode = currNode.nextNode;
+      count++;
+    }
+    return currNode.value[1];
+  }
+
   insertAt(value, index) {
     if (index == 0) {
       this.prepend(value);
-    } else if (index > this.listSize - 1) {
+    } else if (index == this.listSize) {
+      this.append(value);
+    } else if (index > this.listSize) {
       return "Index out of bounds";
     } else {
       const currNodeBeforeValue = this.at(index - 1);
@@ -119,7 +136,6 @@ export default class LinkedList {
     let currNode = this.headNode;
 
     while (currNode.value[0] !== key && currNode.nextNode !== null) {
-      console.log(currNode.value[0]);
       currNode = currNode.nextNode;
     }
     return currNode.value[0] === key ? true : false;
@@ -144,7 +160,7 @@ export default class LinkedList {
       currNode = currNode.nextNode;
       count++;
     }
-    return currNode.value[0] === key ? count : -1;
+    return currNode.value[0] === key ? count : null;
   }
 
   toString() {
