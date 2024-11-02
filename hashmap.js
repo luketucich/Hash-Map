@@ -68,6 +68,64 @@ class HashMap {
       return false;
     }
   }
+
+  length() {
+    const buckets = this.buckets;
+    let entries = 0;
+
+    buckets
+      .filter((ele) => ele !== null) // Filter buckets that are not empty
+      .forEach((ele) => {
+        // Update entries size
+        entries += ele.size();
+      });
+
+    return entries;
+  }
+
+  clear() {
+    this.buckets = [];
+    this.capacity = 16;
+  }
+
+  keys() {
+    const buckets = this.buckets;
+    let keyEntries = [];
+
+    buckets
+      .filter((ele) => ele !== null) // Filter buckets that are not empty
+      .forEach((ele) => {
+        // Add each key to keyEntries
+        keyEntries = keyEntries.concat(ele.getKeys());
+      });
+
+    return keyEntries;
+  }
+
+  values() {
+    const buckets = this.buckets;
+    let valueEntries = [];
+
+    buckets
+      .filter((ele) => ele !== null) // Filter buckets that are not empty
+      .forEach((ele) => {
+        // Add each value to valueEntries
+        valueEntries = valueEntries.concat(ele.getValues());
+      });
+
+    return valueEntries;
+  }
+
+  entries() {
+    const entries = [];
+    const keyEntries = this.keys();
+    const valueEntries = this.values();
+
+    for (const entry in keyEntries) {
+      entries.push([keyEntries[entry], valueEntries[entry]]);
+    }
+    return entries;
+  }
 }
 
 const test = new HashMap();
@@ -83,4 +141,7 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
-test.set("moon", "silver");
+
+console.log(test.keys());
+console.log(test.values());
+console.log(test.entries());

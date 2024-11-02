@@ -184,4 +184,30 @@ export default class LinkedList {
     }
     return (listString += "null");
   }
+
+  getKeys() {
+    const keys = [];
+    let currNode = this.headNode,
+      count = 1;
+
+    while (count <= this.listSize) {
+      keys.push(currNode.value[0]);
+      currNode = currNode.nextNode;
+      count++;
+    }
+    return keys;
+  }
+
+  getValues() {
+    const values = [];
+    let currNode = this.headNode,
+      count = 1;
+
+    while (count <= this.listSize) {
+      values.push(currNode.value[1]);
+      currNode = currNode.nextNode;
+      count++;
+    }
+    return values;
+  }
 }
