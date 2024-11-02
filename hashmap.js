@@ -40,18 +40,33 @@ class HashMap {
 
   get(key) {
     const buckets = this.buckets;
-    const occupiedBuckets = buckets
+    const occupiedBucket = buckets
       .filter((ele) => ele !== null) // Filter buckets that are not empty
       .find((ele) => ele.getValue(key)); // Check if any linked list has the key
-    return occupiedBuckets ? occupiedBuckets.getValue(key) : null;
+    return occupiedBucket ? occupiedBucket.getValue(key) : null;
   }
 
   has(key) {
     const buckets = this.buckets;
-    const occupiedBuckets = buckets
+    const occupiedBucket = buckets
       .filter((ele) => ele !== null) // Filter buckets that are not empty
       .some((ele) => ele.containsKey(key)); // Check if any linked list has the key
-    return occupiedBuckets ? true : false;
+    return occupiedBucket ? true : false;
+  }
+
+  remove(key) {
+    const buckets = this.buckets;
+    const occupiedBucket = buckets
+      .filter((ele) => ele !== null) // Filter buckets that are not empty
+      .find((ele) => ele.getValue(key)); // Check if any linked list has the key
+
+    if (occupiedBucket) {
+      const keyIndex = occupiedBucket.findKey(key);
+      occupiedBucket.removeAt(keyIndex);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
@@ -69,5 +84,3 @@ test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
 test.set("moon", "silver");
-
-console.log(test.get("lion"));
