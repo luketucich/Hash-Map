@@ -3,17 +3,17 @@ import LinkedList from "./linkedlist.js";
 class HashMap {
   constructor() {
     this.buckets = [];
-    this.bucketsLen = 16;
+    this.capacity = 16;
     this.loadFactor = 0.75;
   }
 
   hash(key) {
-    const bucketsLen = this.bucketsLen;
+    const capacity = this.capacity;
     let hashCode = 0;
 
     const primeNumber = 31;
     for (let i = 0; i < key.length; i++) {
-      hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % bucketsLen;
+      hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % capacity;
     }
 
     return hashCode;
@@ -39,20 +39,35 @@ class HashMap {
   }
 
   get(key) {
-    const index = this.hash(key);
     const buckets = this.buckets;
+    const occupiedBuckets = buckets
+      .filter((ele) => ele !== null) // Filter buckets that are not empty
+      .find((ele) => ele.getValue(key)); // Check if any linked list has the key
+    return occupiedBuckets ? occupiedBuckets.getValue(key) : null;
+  }
 
-    return buckets[index] == undefined
-      ? null
-      : buckets[index].valueAt(buckets[index].findKey(key));
+  has(key) {
+    const buckets = this.buckets;
+    const occupiedBuckets = buckets
+      .filter((ele) => ele !== null) // Filter buckets that are not empty
+      .some((ele) => ele.containsKey(key)); // Check if any linked list has the key
+    return occupiedBuckets ? true : false;
   }
 }
 
-const map = new HashMap();
-map.set("loop", "VALUE1");
-console.log(map.buckets[map.hash("loop")].toString());
-map.set("fruit", "VALUE1");
-console.log(map.buckets[map.hash("loop")].toString());
-map.set("fruit", "VALUE2");
-console.log(map.buckets[map.hash("loop")].toString());
-console.log(map.get("asdfasdf"));
+const test = new HashMap();
+test.set("apple", "red");
+test.set("banana", "yellow");
+test.set("carrot", "orange");
+test.set("dog", "brown");
+test.set("elephant", "gray");
+test.set("frog", "green");
+test.set("grape", "purple");
+test.set("hat", "black");
+test.set("ice cream", "white");
+test.set("jacket", "blue");
+test.set("kite", "pink");
+test.set("lion", "golden");
+test.set("moon", "silver");
+
+console.log(test.get("lion"));

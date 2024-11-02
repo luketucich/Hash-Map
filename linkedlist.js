@@ -141,6 +141,15 @@ export default class LinkedList {
     return currNode.value[0] === key ? true : false;
   }
 
+  getValue(key) {
+    let currNode = this.headNode;
+
+    while (currNode.value[0] !== key && currNode.nextNode !== null) {
+      currNode = currNode.nextNode;
+    }
+    return currNode.value[0] === key ? currNode.value[1] : null;
+  }
+
   find(value) {
     let count = 0,
       currNode = this.headNode;
