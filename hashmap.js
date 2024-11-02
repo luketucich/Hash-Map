@@ -22,19 +22,27 @@ class HashMap {
   set(key, value) {
     const index = this.hash(key);
     const buckets = this.buckets;
+    const entries = this.entries();
 
-    // If bucket is empty, create a new Linked List
-    if (buckets[index] === undefined) {
-      buckets[index] = new LinkedList();
-      buckets[index].append([key, value]);
-      // Overwrite value if key already exists in bucket
-    } else if (buckets[index].containsKey(key)) {
-      const pairIndex = buckets[index].findKey(key);
-      buckets[index].removeAt(pairIndex);
-      buckets[index].insertAt([key, value], pairIndex);
-      // Otherwise, simply append key-value pair
+    // Resize buckets if capacity reached
+    if (entries.length == this.capacity * this.loadFactor) {
+      this.#resize();
+      this.set(key, value);
+      // Otherwise, simply add new pair
     } else {
-      buckets[index].append([key, value]);
+      if (buckets[index] === undefined) {
+        // If bucket is empty, create a new Linked List
+        buckets[index] = new LinkedList();
+        buckets[index].append([key, value]);
+        // Overwrite value if key already exists in bucket
+      } else if (buckets[index].containsKey(key)) {
+        const pairIndex = buckets[index].findKey(key);
+        buckets[index].removeAt(pairIndex);
+        buckets[index].insertAt([key, value], pairIndex);
+        // Otherwise, simply append key-value pair
+      } else {
+        buckets[index].append([key, value]);
+      }
     }
   }
 
@@ -124,24 +132,18 @@ class HashMap {
     for (const entry in keyEntries) {
       entries.push([keyEntries[entry], valueEntries[entry]]);
     }
+
     return entries;
   }
+
+  #resize() {
+    const prevCapacity = this.capacity;
+    const prevEntries = this.entries();
+
+    this.clear();
+    this.capacity = prevCapacity * 2;
+    prevEntries.forEach((pair) => {
+      this.set(pair[0], pair[1]);
+    });
+  }
 }
-
-const test = new HashMap();
-test.set("apple", "red");
-test.set("banana", "yellow");
-test.set("carrot", "orange");
-test.set("dog", "brown");
-test.set("elephant", "gray");
-test.set("frog", "green");
-test.set("grape", "purple");
-test.set("hat", "black");
-test.set("ice cream", "white");
-test.set("jacket", "blue");
-test.set("kite", "pink");
-test.set("lion", "golden");
-
-console.log(test.keys());
-console.log(test.values());
-console.log(test.entries());
